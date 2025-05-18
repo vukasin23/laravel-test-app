@@ -15,8 +15,7 @@ RUN npm run build
 FROM composer:latest AS vendor
 
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader
-
+RUN composer install --prefer-dist --no-scripts --no-progress
 
 # 3. Stage: Final application container
 FROM php:8.2-fpm
