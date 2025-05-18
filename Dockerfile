@@ -1,4 +1,4 @@
-# Step 1: Build assets with Node
+# 1. Stage: Build assets using Node
 FROM node:18-alpine AS node
 
 WORKDIR /app
@@ -7,12 +7,23 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 COPY resources/ resources/
-COPY vite.config.js .
+COPY vite.config.js tailwind.config.js postcss.config.js ./
 RUN npm run build
 
-# Step 2: Setup PHP + Composer + Copy built assets
+
+# 2. Stage: Install PHP dependencies
+FROM composer:latest AS vendor
+
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader
+
+
+# 3. Stage: Final application container
 FROM php:8.2-fpm
 
+WORKDIR /var/www/html
+
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
@@ -23,19 +34,22 @@ RUN apt-get update && apt-get install -y \
     curl \
     && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Copy built assets and vendor
+COPY --from=node /app/public/build /var/www/html/public/build
+COPY --from=vendor /app/vendor /var/www/html/vendor
 
-WORKDIR /var/www/html
-
+# Copy full Laravel source
 COPY . .
 
-# Copy ONLY the built assets from node stage
-COPY --from=node /app/public/build /var/www/html/public/build
+# Fix permissions
+RUN chown -R www-data:www-data storage bootstrap/cache
 
-RUN composer install --no-dev --optimize-autoloader
+# === CLEAN CACHE AND FORCE HTTPS ===
+RUN php artisan config:clear \
+ && php artisan cache:clear \
+ && php artisan view:clear \
+ && php artisan route:clear \
+ && php artisan migrate --force || true
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
-EXPOSE 8000
-
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
+# Start Laravel server (for Railway or Docker local)
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
