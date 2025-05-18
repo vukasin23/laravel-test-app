@@ -112,6 +112,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('JS radi?');
             // Postavljanje globalnih varijabli
             const total = {{ $total }};
             const phases = @json($phases->pluck('id'));
