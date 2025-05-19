@@ -2,20 +2,13 @@
 
 return [
 
-    'paths' => ['api/*', 'build/*'], // build/* je bitan zbog Vite fajlova
-
+    'paths' => ['api/*', 'voorman/*', 'sanctum/csrf-cookie'],
     'allowed_methods' => ['*'],
-
-    'allowed_origins' => ['*'], // ili npr. ['https://tvoj-domen.com']
-
+    'allowed_origins' => ['https://laravel-test-app-production.up.railway.app'],
     'allowed_origins_patterns' => [],
-
     'allowed_headers' => ['*'],
-
     'exposed_headers' => [],
-
     'max_age' => 0,
-
     'supports_credentials' => false,
 
 ];
