@@ -84,7 +84,7 @@ class ManagerDashboardController extends Controller
                 'id' => $hall->id,
                 'name'             => $hall->name,
                 'voorman'          => trim((string)($hall->voorman?->first_name . ' ' . $hall->voorman?->last_name)),
-                'voorman_phone'    => $hall->voorman?->phone,
+                'voorman_phone'    => $hall->voorman?->PhoneNumber,
                 'worker_count'     => $present,
                 'expected_workers' => $expected,
                 'planned'          => $hallTotal,
