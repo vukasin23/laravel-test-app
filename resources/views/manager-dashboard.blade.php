@@ -135,5 +135,9 @@
         }
         setInterval(updateClock,1000);
         updateClock();
+
+          setTimeout(() => {
+        location.reload();
+    }, 15000);
     </script>
 </x-app-layout>
