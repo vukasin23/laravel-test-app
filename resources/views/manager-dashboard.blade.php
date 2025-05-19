@@ -27,7 +27,7 @@
     {{-- ✅ Manager info --}}
     <div class="bg-white shadow rounded-lg p-4 mb-6 text-sm text-gray-700">
         <p class="font-bold">{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</p>
-        <p class="text-gray-500">productie manager – {{ auth()->user()->phone ?? 'n/a' }}</p>
+        <p class="text-gray-500">productie manager – {{ auth()->user()->PhoneNumber ?? 'n/a' }}</p>
     </div>
 
     {{-- ✅ Total Voortgang (overview blok) --}}
