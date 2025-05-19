@@ -142,7 +142,7 @@
                     const prev = document.querySelector(`input[data-number="${number}"][data-index="${index-1}"]`);
                     if (!prev.checked) {
                         cb.checked = false;
-                        showError('Morate prvo završiti prethodnu fazu!');
+                        showError('U moet eerst de vorige fase voltooien!');
                         return;
                     }
                 }
@@ -171,10 +171,10 @@
                     is_done: isDone
                 })
                     .then(() => {
-                        showSuccess('Uspešno snimljeno ✅');
+                        showSuccess('Succesvol opgeslagen ✅');
                         updateProgress();
                     })
-                    .catch(() => showError('Greška pri snimanju.'));
+                    .catch(() => showError('Fout bij het opslaan.'));
             }
 
             function updateProgress() {
