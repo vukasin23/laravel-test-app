@@ -129,13 +129,15 @@ class ManagerDashboardController extends Controller
             ];
         }
         $completedPerHall = DB::table('phase_items as pi')
-            ->join('phases as p', 'pi.phase_id', '=', 'p.id')
-            ->whereDate('pi.date', now()->toDateString())
-            ->where('pi.is_done', 1)
-            ->select('p.hall_id', DB::raw('COUNT(DISTINCT pi.number) as completed_elements'))
-            ->groupBy('p.hall_id')
-            ->havingRaw('COUNT(DISTINCT pi.phase_id) = 5')
-            ->pluck('completed_elements', 'p.hall_id');
+    ->join('phases as p', 'pi.phase_id', '=', 'p.id')
+    ->whereDate('pi.date', now()->toDateString())
+    ->where('pi.is_done', 1)
+    ->select('p.hall_id', 'pi.number', DB::raw('COUNT(DISTINCT pi.phase_id) as phase_count'))
+    ->groupBy('p.hall_id', 'pi.number')
+    ->having('phase_count', '=', 5)
+    ->get()
+    ->groupBy('hall_id')
+    ->map(fn($group) => $group->count());
 
         return view('manager-dashboard', [
             'halls'            => $dashboardData,
