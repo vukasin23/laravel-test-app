@@ -1,5 +1,6 @@
 <x-app-layout>
     {{-- ✅ HEADER sekcija sa vremenom i total elementima --}}
+     <div class="flex flex-col h-screen w-full overflow-hidden px-4 py-4 gap-4">
     <div class="bg-white shadow rounded-lg p-6 mb-4 flex justify-between items-center">
 
         <div>
@@ -125,6 +126,7 @@
                 @endforeach
             </div>
         </div>
+          </div>
     @endforeach
 
     {{-- ✅ Sat --}}
